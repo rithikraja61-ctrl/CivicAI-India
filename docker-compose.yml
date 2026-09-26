@@ -1,0 +1,31 @@
+services:
+  civicai-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: civicai-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SERVER_PORT=8080
+    restart: unless-stopped
+    networks:
+      - civicai-network
+
+  civicai-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: civicai-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - civicai-backend
+    restart: unless-stopped
+    networks:
+      - civicai-network
+
+networks:
+  civicai-network:
+    driver: bridge
